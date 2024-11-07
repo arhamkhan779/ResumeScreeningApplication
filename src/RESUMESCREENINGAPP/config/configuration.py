@@ -1,6 +1,6 @@
 from RESUMESCREENINGAPP.constants import *
 from RESUMESCREENINGAPP.utils.common import read_yaml,create_directories
-from RESUMESCREENINGAPP.entity.config_entity import DataIngstionConfig,DataPreprocessConfig
+from RESUMESCREENINGAPP.entity.config_entity import DataIngstionConfig,DataPreprocessConfig,ModelConfig
 import os
 from pathlib import Path
 
@@ -36,6 +36,29 @@ class ConfigurationManager:
                source_dir=config.Unprocess_dir,
                voc_size=self.params.VOC_SIZE,
                target_preprocessor=config.target_preprocessor_file,
-               text_preprocessor=config.text_preprocessor_file
+               text_preprocessor=config.text_preprocessor_file,
+               max_length=self.params.max_length
           )
           return data_preprocessing_config
+    
+    def get_base_model_config(self) -> ModelConfig:
+         config=self.config.Model
+         create_directories([config.root_dir])
+
+         model_config=ModelConfig(
+              root_dir=config.root_dir,
+              model_path=config.model_file,
+              batch=self.params.BATCH,
+              epochs=self.params.EPOCHS,
+              Max_features=self.params.MAX_FEATURES,
+              optimizer=self.params.OPTIMIZER,
+              loss=self.params.loss,
+              metrics=self.params.metrics,
+              Voc_size=self.params.VOC_SIZE,
+              max_length=self.params.max_length)
+         
+         return model_config
+    
+
+    
+   

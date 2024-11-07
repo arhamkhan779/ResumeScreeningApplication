@@ -86,8 +86,7 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
         try:
             one_hot_rep = [keras.preprocessing.text.one_hot(words, self.config.voc_size) for words in X]
             logger.info("Embedding Document with Pre Padding")
-            max_length = max([len(doc) for doc in one_hot_rep])  # Find the max sentence length
-            padded_docs = keras.preprocessing.sequence.pad_sequences(one_hot_rep, padding='pre', maxlen=max_length)
+            padded_docs = keras.preprocessing.sequence.pad_sequences(one_hot_rep, padding='pre', maxlen=self.config.max_length)
             return padded_docs
         except Exception as e:
             logger.info(e)

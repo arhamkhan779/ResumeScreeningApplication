@@ -2,3 +2,7 @@ BATCH: 16
 EPOCHS: 10
 MAX_FEATURES: 50
 VOC_SIZE: 10000
+OPTIMIZER: 'Adam'
+loss: "Categorical_Crossentropy"
+metrics: ['accuracy']
+max_length: 30

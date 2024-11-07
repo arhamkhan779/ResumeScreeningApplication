@@ -15,3 +15,17 @@ class DataPreprocessConfig:
     voc_size: int
     text_preprocessor: str
     target_preprocessor: str
+    max_length:int
+
+@dataclass
+class ModelConfig:
+    root_dir: Path
+    model_path: Path
+    batch: int
+    epochs: int
+    Voc_size: int
+    Max_features: int
+    optimizer: str
+    loss: str
+    metrics: list
+    max_length: int

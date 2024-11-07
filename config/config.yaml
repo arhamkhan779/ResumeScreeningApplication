@@ -13,3 +13,6 @@ preprocessing_dir:
   text_preprocessor_file: artifacts/data_preprocess/text_preprocessor.pkl
   target_preprocessor_file: artifacts/data_preprocess/target_preprocessor.pkl
 
+Model:
+  root_dir: artifacts/Model
+  model_file: artifacts/Model/model.h5
