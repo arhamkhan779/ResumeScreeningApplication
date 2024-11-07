@@ -34,7 +34,8 @@ class ConfigurationManager:
           data_preprocessing_config=DataPreprocessConfig(
                root_dir=config.root_dir,
                source_dir=config.Unprocess_dir,
-               output_file=config.file,
-               voc_size=self.params.VOC_SIZE
+               voc_size=self.params.VOC_SIZE,
+               target_preprocessor=config.target_preprocessor_file,
+               text_preprocessor=config.text_preprocessor_file
           )
           return data_preprocessing_config

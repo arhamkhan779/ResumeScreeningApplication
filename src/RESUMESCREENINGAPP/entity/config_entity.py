@@ -12,5 +12,6 @@ class DataIngstionConfig:
 class DataPreprocessConfig:
     root_dir: Path
     source_dir: Path
-    output_file: str
     voc_size: int
+    text_preprocessor: str
+    target_preprocessor: str

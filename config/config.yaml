@@ -10,5 +10,6 @@ data_ingestion:
 preprocessing_dir:
   root_dir: artifacts/data_preprocess
   Unprocess_dir: artifacts/data_ingestion/UpdatedResumeDataSet.csv
-  file: Processed.csv
+  text_preprocessor_file: artifacts/data_preprocess/text_preprocessor.pkl
+  target_preprocessor_file: artifacts/data_preprocess/target_preprocessor.pkl
 
