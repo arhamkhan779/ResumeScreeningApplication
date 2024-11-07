@@ -1,0 +1,21 @@
+numpy
+pandas
+nltk
+tensorflow
+setuptools
+dvc
+mlflow
+notebook
+matplotlib
+kaggle
+seaborn
+python-box
+pyYAML
+tqdm
+ensure
+joblib
+types-PyYAML
+scipy
+Flask
+Flask-Cors
+-e .

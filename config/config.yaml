@@ -1,0 +1,14 @@
+artifacts_root: artifacts
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_url: gauravduttakiit/resume-dataset
+  local_data_file: artifacts/data_ingestion/Dataset.zip
+  unzip_dir: artifacts/data_ingestion
+
+
+preprocessing_dir:
+  root_dir: artifacts/data_preprocess
+  Unprocess_dir: artifacts/data_ingestion/UpdatedResumeDataSet.csv
+  file: Processed.csv
+
