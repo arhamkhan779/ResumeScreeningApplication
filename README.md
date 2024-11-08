@@ -1,4 +1,3 @@
-```markdown
 # Resume Screening Application
 
 Welcome to the **Resume Screening Application**! This is an end-to-end machine learning pipeline designed to automatically classify resumes based on job categories. This project leverages advanced NLP models to analyze resumes and predict the appropriate job category, which can be helpful for recruiters and job seekers alike.
