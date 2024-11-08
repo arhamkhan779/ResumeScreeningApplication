@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Screening Application</title>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('pp.jpg'); /* Set background image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .upload-section {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-section h2 {
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #drag-area {
+            width: 100%;
+            height: 250px;
+            border: 3px dashed #007bff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #drag-area:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        #drag-area p {
+            font-size: 20px;
+            color: #007bff;
+            margin: 0;
+        }
+
+        button {
+            padding: 14px 32px;
+            font-size: 18px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .result-section {
+            margin-top: 40px;
+            display: none;
+            background-color: #f7f9fc;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-section h3 {
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-section p {
+            font-size: 20px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        #status {
+            font-size: 18px;
+            color: green;
+            margin-top: 10px;
+        }
+
+        .error-msg {
+            font-size: 18px;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Resume Screening Application</h1>
+
+        <div class="upload-section">
+            <h2>Upload Your Resume</h2>
+
+            <!-- Drag-and-drop or file input -->
+            <label for="resume-file">
+                <div id="drag-area">
+                    <p>Drag and drop your resume here</p>
+                </div>
+            </label>
+            <input type="file" id="resume-file" accept=".pdf" onchange="uploadFile()" />
+
+            <p id="status"></p>
+            
+            <button onclick="submitResume()">Submit</button>
+        </div>
+
+        <div id="result" class="result-section">
+            <h3>Predicted Job Category:</h3>
+            <p id="prediction-result"></p>
+        </div>
+    </div>
+
+    <script>
+        // Handling drag-and-drop functionality
+        const dragArea = document.getElementById("drag-area");
+
+        dragArea.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dragArea.style.backgroundColor = "#e6f7ff";
+        });
+
+        dragArea.addEventListener("dragleave", () => {
+            dragArea.style.backgroundColor = "transparent";
+        });
+
+        dragArea.addEventListener("drop", (event) => {
+            event.preventDefault();
+            let file = event.dataTransfer.files[0];
+            document.getElementById("resume-file").files = event.dataTransfer.files;
+            displayFileName(file);
+        });
+
+        function displayFileName(file) {
+            const status = document.getElementById("status");
+            status.innerText = file.name;
+        }
+
+        // Handling file upload button click
+        function uploadFile() {
+            const file = document.getElementById("resume-file").files[0];
+            if (file) {
+                document.getElementById("status").innerText = file.name;
+            }
+        }
+
+        // Function to handle form submission
+        async function submitResume() {
+            const fileInput = document.getElementById("resume-file");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please upload a resume.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                const category = result.category;
+                document.getElementById("prediction-result").innerText = category;
+                document.querySelector(".result-section").style.display = "block";
+            } else {
+                alert("Error uploading file.");
+            }
+        }
+    </script>
+
+</body>
+</html>

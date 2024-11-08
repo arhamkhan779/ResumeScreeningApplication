@@ -1,6 +1,6 @@
 from RESUMESCREENINGAPP.constants import *
 from RESUMESCREENINGAPP.utils.common import read_yaml,create_directories
-from RESUMESCREENINGAPP.entity.config_entity import DataIngstionConfig,DataPreprocessConfig,ModelConfig
+from RESUMESCREENINGAPP.entity.config_entity import DataIngstionConfig,DataPreprocessConfig,ModelConfig,TrainingConfig
 import os
 from pathlib import Path
 
@@ -59,6 +59,24 @@ class ConfigurationManager:
          
          return model_config
     
-
+    def get_training_config(self) -> TrainingConfig:
+         config=self.config.Training
+         create_directories([config.root_dir])
+         training_config=TrainingConfig(
+              root_dir=config.root_dir,
+              trained_model_path=config.model_file,
+              data_set_dir=config.data_dir,
+              target_preprocessor_path=config.target_preprocessor,
+              text_preprocessor_path=config.text_preprocessor,
+              results_path=config.results,
+              optimizer=self.params.OPTIMIZER,
+              loss=self.params.loss,
+              metrics=self.params.metrics,
+              batch=self.params.BATCH,
+              epochs=self.params.EPOCHS,
+              base_model=config.base_model
+         )
+        
+         return training_config
     
    

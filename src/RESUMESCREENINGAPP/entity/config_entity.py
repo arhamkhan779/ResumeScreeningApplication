@@ -29,3 +29,19 @@ class ModelConfig:
     loss: str
     metrics: list
     max_length: int
+
+@dataclass
+class TrainingConfig:
+    root_dir: Path
+    trained_model_path: Path
+    batch: int
+    epochs: int
+    optimizer: str
+    loss: str
+    metrics: list
+    target_preprocessor_path:Path
+    text_preprocessor_path: Path
+    results_path: Path
+    data_set_dir: Path
+    base_model: Path
+    

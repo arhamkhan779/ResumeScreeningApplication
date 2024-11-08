@@ -16,3 +16,12 @@ preprocessing_dir:
 Model:
   root_dir: artifacts/Model
   model_file: artifacts/Model/model.h5
+
+Training:
+  root_dir: artifacts/training
+  model_file: artifacts/training/trained_model.h5
+  data_dir: artifacts/data_ingestion/UpdatedResumeDataSet.csv
+  target_preprocessor: artifacts/data_preprocess/target_preprocessor.pkl
+  text_preprocessor: artifacts/data_preprocess/text_preprocessor.pkl
+  results: artifacts/training/results.csv
+  base_model: artifacts/Model/model.h5
