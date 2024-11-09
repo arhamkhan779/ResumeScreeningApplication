@@ -7,6 +7,9 @@ import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import seaborn as sn
+import numpy as np
+from sklearn.metrics import confusion_matrix
 
 class ModelTrainer:
     def __init__(self,config: TrainingConfig):
@@ -49,11 +52,11 @@ class ModelTrainer:
             logger.info(f"Shape : {Y.shape} Column Data After Transformation {Y[0]}")
             
             logger.info("Splitting Data into Training and Testing Part")
-            X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.20,random_state=45)
-            logger.info(f"X_train : {X_train.shape} X_test: {X_test.shape} Y_train: {Y_train.shape} Y_test: {Y_test.shape}")
+            self.X_train,self.X_test,self.Y_train,self.Y_test=train_test_split(X,Y,test_size=0.20,random_state=45)
+            logger.info(f"X_train : {self.X_train.shape} X_test: {self.X_test.shape} Y_train: {self.Y_train.shape} Y_test: {self.Y_test.shape}")
             self.model.compile(optimizer='Adam',loss=keras.losses.CategoricalCrossentropy(),metrics=['accuracy','precision','recall'])
             logger.info(f"Start training on Epochs : {self.config.epochs} , Batch_Size : {self.config.batch}")
-            history=self.model.fit(X_train,Y_train,batch_size=self.config.batch,epochs=self.config.epochs,validation_data=(X_test,Y_test))
+            history=self.model.fit(self.X_train,self.Y_train,batch_size=self.config.batch,epochs=self.config.epochs,validation_data=(self.X_test,self.Y_test))
 
             logger.info(f"Saving History as results.csv at {self.config.results_path}")
             df=pd.DataFrame(history.history)
@@ -109,7 +112,27 @@ class ModelTrainer:
             logger.info("Plotting Recall ")
             self.plot_results(epochs,recall,val_recall,"Recall","Validation Recall","Recall","Epochs","Model Recall","artifacts/training/model_Recall.png")
 
+            logger.info("Plotting Confusion Matrix")
+            prediction=self.model.predict(self.X_test)
+            
+            Y_test_labels = np.argmax(self.Y_test, axis=1)
+            Y_pred_labels = np.argmax(prediction, axis=1)
+
+            cm = confusion_matrix(Y_test_labels, Y_pred_labels)
+            plt.figure(figsize=(30, 15))  
+            sn.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=np.arange(0, 25),  # 24 classes, starting from 1 to 24
+            yticklabels=np.arange(0, 25),
+            cbar=True, linewidths=0.5)
+            plt.title("Confusion Matrix", fontsize=16)
+            plt.xlabel("Predicted Labels", fontsize=12)
+            plt.ylabel("True Labels", fontsize=12)
+            plt.xticks(rotation=45, ha="right")
+            plt.yticks(rotation=0, va="center")
+            output_path = 'artifacts/training/confusion_matrix.png'
+            plt.tight_layout()  # Adjust layout to avoid clipping
+            plt.savefig(output_path)
+            plt.close()
         except Exception as e:
             logger.info(e)
             raise e
-   

@@ -1,15 +1,40 @@
-from tensorflow import keras
-import joblib
 import numpy as np
-import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
 
-model=keras.models.load_model("D:\\NLP\\ResumeScreeningApplication\\artifacts\\training\\trained_model.h5")
+# Example data (you can replace this with your actual Y_test and Y_pred)
+Y_test = np.array([[0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                   [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                   [1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                   [0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                   [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.]])
 
-text_preprocessor=joblib.load("D:\\NLP\\ResumeScreeningApplication\\artifacts\\data_preprocess\\text_preprocessor.pkl")
+Y_pred = np.array([[4.16017743e-03, 5.16608015e-05, 9.81209457e-01, 6.86367798e-07, 1.06708123e-03, 4.04628518e-05, 3.65655799e-03, 7.56418612e-03, 3.00806323e-06, 2.01902608e-03, 6.58043518e-06, 2.57823376e-06, 1.98451266e-06, 2.37333029e-06, 2.59241301e-06, 1.74099387e-05, 6.43970679e-06, 8.85533666e-07, 4.96874381e-05, 3.57030221e-05, 1.83144966e-05, 2.35886273e-05, 3.82618737e-07, 5.57525746e-05, 3.49158813e-06],
+                   [4.35778609e-04, 1.95259036e-05, 2.74166973e-06, 1.31524587e-07, 6.66772667e-06, 2.76214269e-04, 2.45740694e-07, 2.18371401e-08, 8.01431306e-05, 2.05649238e-04, 2.89610657e-03, 6.25599084e-09, 1.62090669e-06, 9.91055131e-01, 3.14415701e-07, 2.59762543e-04, 1.30034641e-06, 4.49946469e-07, 4.08459812e-07, 2.73525927e-07, 4.70229750e-03, 1.10936014e-07, 9.40667087e-06, 4.05088031e-05, 5.15755255e-06],
+                   [1.23830268e-03, 5.83123532e-04, 4.05388710e-04, 3.96599731e-04, 2.98932567e-02, 4.49265463e-06, 1.43093571e-01, 5.00213879e-04, 6.43709907e-04, 1.58922304e-03, 2.99025240e-04, 1.83018465e-02, 7.92141259e-01, 2.24935393e-05, 7.25541031e-03, 6.28400667e-05, 2.46730167e-04, 2.40785535e-03, 6.38045822e-05, 7.30490910e-06, 4.00013632e-05, 4.21188131e-04, 2.86360853e-04, 8.87499627e-05, 7.17347757e-06],
+                   [3.48783833e-05, 5.95196674e-04, 2.08686950e-04, 8.73089194e-01, 7.73638394e-03, 1.21363719e-05, 3.59129393e-04, 1.63592864e-03, 6.05949972e-05, 9.15009514e-05, 3.86029824e-05, 9.07640846e-04, 5.68519579e-03, 6.13191241e-06, 3.36925834e-02, 2.89608925e-05, 6.81153091e-04, 4.27534841e-02, 6.03409135e-05, 1.61765438e-05, 3.29056979e-06, 3.19019053e-03, 2.84344610e-02, 1.76342874e-05, 6.60474645e-04],
+                   [1.48021398e-04, 2.27810947e-11, 8.69294854e-06, 1.52367594e-08, 3.03526595e-05, 1.53859273e-05, 1.00119860e-05, 7.96871900e-04, 2.15031201e-10, 2.87131879e-05, 3.79530227e-11, 2.25453731e-03, 2.71092002e-08, 2.75883005e-09, 2.67514606e-05, 2.19740285e-11, 9.79946434e-01, 1.87286346e-08, 1.60187557e-02, 6.96637493e-04, 2.78258805e-10, 1.88210888e-05, 1.13742118e-08, 1.14390710e-11, 7.17697457e-10]])
 
-prediction=model.predict(input)
+# Convert one-hot encoded labels to class labels (index of the maximum value)
+Y_test_labels = np.argmax(Y_test, axis=1)
+Y_pred_labels = np.argmax(Y_pred, axis=1)
 
-Categories=['Arts', 'Mechanical Engineer', 'DevOps Engineer', 'Hadoop', 'ETL Developer', 'Blockchain', 'Civil Engineer', 'Electrical Engineering', 'PMO', 'SAP Developer', 'HR', 'DotNet Developer', 'Python Developer', 'Operations Manager', 'Data Science', 'Database', 'Business Analyst', 'Web Designing', 'Testing', 'Health and fitness', 'Network Security Engineer', 'Automation Testing', 'Sales', 'Java Developer', 'Advocate']
+# Step 2: Compute the confusion matrix
+cm = confusion_matrix(Y_test_labels, Y_pred_labels)
 
+# Step 3: Visualize the confusion matrix using Seaborn's heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=np.arange(cm.shape[1]), yticklabels=np.arange(cm.shape[0]))
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted Labels")
+plt.ylabel("True Labels")
 
-print(Categories[np.argmax(prediction)])
+# Step 4: Save the confusion matrix plot
+output_path = 'confusion_matrix.png'
+plt.savefig(output_path)
+
+# Close the plot to free up resources
+plt.close()
+
+print(f"Confusion matrix saved at: {output_path}")
